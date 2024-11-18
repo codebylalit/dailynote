@@ -1,30 +1,31 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
- useEffect(() => {
-   const cursorTrail = (e) => {
-     const trail = document.createElement("div");
-     trail.classList.add("cursor-trail");
+  const [isMenuOpen, setIsMenuOpen] = useState(false); 
 
-     trail.style.left = `${e.pageX}px`;
-     trail.style.top = `${e.pageY}px`;
 
-     document.body.appendChild(trail);
+  useEffect(() => {
+    const cursorTrail = (e) => {
+      const trail = document.createElement("div");
+      trail.classList.add("cursor-trail");
 
-     setTimeout(() => {
-       trail.remove();
-     }, 1000); 
-   };
+      trail.style.left = `${e.pageX}px`;
+      trail.style.top = `${e.pageY}px`;
 
-   // Track mouse movement and create trails
-   document.body.addEventListener("mousemove", cursorTrail);
+      document.body.appendChild(trail);
 
-   // Clean up event listener on component unmount
-   return () => {
-     document.body.removeEventListener("mousemove", cursorTrail);
-   };
- }, []);
+      setTimeout(() => {
+        trail.remove();
+      }, 1000);
+    };
+
+    document.body.addEventListener("mousemove", cursorTrail);
+
+    return () => {
+      document.body.removeEventListener("mousemove", cursorTrail);
+    };
+  }, []);
 
   const navigate = useNavigate();
 
@@ -38,25 +39,41 @@ const Home = () => {
 
   return (
     <section className="bg-gray-900 text-white min-h-screen flex flex-col items-center">
-      {/* Header */}
       <header className="flex justify-between w-full px-8 py-6">
-        {/* Logo with creative shapes */}
         <div className="relative flex items-center space-x-4">
-          {/* Circle behind the "D" */}
           <div className="absolute -left-0 w-14 h-14 rounded-full bg-yellow-500 z-0"></div>
 
-          {/* Logo text with Dailynote */}
           <h1 className="text-3xl font-bold text-white relative z-10">
             Dailynote
           </h1>
         </div>
 
-        <nav>
+        <button
+          className="sm:hidden text-white focus:outline-none"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+        >
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            ></path>
+          </svg>
+        </button>
+
+        <nav className="hidden sm:flex">
           <ul className="flex space-x-6">
             <li>
               <button
                 onClick={goToLogin}
-                className="bg-purple-600 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg hover:bg-purple-700"
+                className="bg-purple-600 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg hover:bg-purple-700 text-sm sm:text-base"
               >
                 Log in
               </button>
@@ -64,7 +81,7 @@ const Home = () => {
             <li>
               <button
                 onClick={goToRegister}
-                className="bg-yellow-500 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg hover:bg-yellow-600"
+                className="bg-yellow-500 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg hover:bg-yellow-600 text-sm sm:text-base"
               >
                 Sign up
               </button>
@@ -73,7 +90,31 @@ const Home = () => {
         </nav>
       </header>
 
-      {/* Hero Section */}
+      <nav
+        className={`sm:hidden ${
+          isMenuOpen ? "block" : "hidden"
+        } w-full bg-gray-800 text-white p-4`}
+      >
+        <ul className="flex flex-col space-y-4">
+          <li>
+            <button
+              onClick={goToLogin}
+              className="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700"
+            >
+              Log in
+            </button>
+          </li>
+          <li>
+            <button
+              onClick={goToRegister}
+              className="bg-yellow-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-600"
+            >
+              Sign up
+            </button>
+          </li>
+        </ul>
+      </nav>
+
       <div className="text-center py-24 px-6 max-w-4xl mx-auto">
         <h2 className="text-4xl font-bold mb-6 text-white">
           Your notes at your fingertips with DailyNote
@@ -124,7 +165,6 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Footer Section */}
       <footer className="mt-12 text-center">
         <p className="text-sm text-gray-400">
           &copy; 2024 Dailynote. All rights reserved.
