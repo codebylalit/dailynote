@@ -1,6 +1,6 @@
 // src/firebase.js
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth"; 
+import { getAuth } from "firebase/auth";
 
 import {
   getFirestore,
@@ -12,20 +12,30 @@ import {
   deleteDoc,
   query,
   where,
+  orderBy,
 } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCGfnAsDgooGn1NOY5Ufc1HONlmPuEi4XM",
-  authDomain: "hotels-4d2cd.firebaseapp.com",
-  projectId: "hotels-4d2cd",
-  storageBucket: "hotels-4d2cd.firebasestorage.app",
-  messagingSenderId: "423871600790",
-  appId: "1:423871600790:web:a26b7beece2662802b8ab7",
-  measurementId: "G-20PBDM4SGY",
+  apiKey: "AIzaSyAnTuA6_Ytwd176rUIdjCuDyNxkYX5K_JA",
+  authDomain: "dailynote-43ec8.firebaseapp.com",
+  projectId: "dailynote-43ec8",
+  storageBucket: "dailynote-43ec8.firebasestorage.app",
+  messagingSenderId: "21378421730",
+  appId: "1:21378421730:web:a3da88e1b0572033ea1fbb",
+  measurementId: "G-C4KLWG8JNM",
 };
-
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 const db = getFirestore(app);
-export { db, collection, getDocs, addDoc, updateDoc, doc, deleteDoc, query,
-  where };
+export {
+  db,
+  collection,
+  getDocs,
+  addDoc,
+  updateDoc,
+  doc,
+  deleteDoc,
+  query,
+  where,
+  orderBy,
+};
