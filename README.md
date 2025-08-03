@@ -2,15 +2,15 @@
 
 A modern, responsive note-taking application built with React and Firebase. DailyNote allows users to create, edit, and manage their personal notes with a beautiful, intuitive interface.
 
-## ✨ Features
+## Features
 
-- **🔐 User Authentication**: Secure login and registration with Firebase Auth
-- **📝 Note Management**: Create, edit, and delete notes with real-time updates
-- **🎨 Modern UI**: Beautiful, responsive design built with Tailwind CSS
-- **📊 Dashboard**: Clean dashboard interface for managing all your notes
-- **⚡ Real-time**: Instant updates and synchronization across devices
-- **📱 Responsive**: Works seamlessly on desktop, tablet, and mobile devices
-- **🔒 Secure**: User-specific notes with Firebase security rules
+-  User Authentication**: Secure login and registration with Firebase Auth
+-  Note Management**: Create, edit, and delete notes with real-time updates
+-  Modern UI**: Beautiful, responsive design built with Tailwind CSS
+-  Dashboard**: Clean dashboard interface for managing all your notes
+-  Real-time**: Instant updates and synchronization across devices
+-  Responsive**: Works seamlessly on desktop, tablet, and mobile devices
+-  Secure**: User-specific notes with Firebase security rules
 
 ## 🛠️ Tech Stack
 
@@ -152,9 +152,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Support
 
 If you encounter any issues or have questions, please:
-- Check the [Issues](https://github.com/yourusername/dailynote/issues) page
-- Create a new issue with detailed information
-- Contact the development team
+- Contact the development team at visonovaofficial@gmail.com
 
 ---
 
