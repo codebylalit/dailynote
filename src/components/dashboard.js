@@ -15,6 +15,39 @@ import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
 
+// Add custom styles for animations
+const toastStyles = `
+  @keyframes slideIn {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes scaleIn {
+    from {
+      transform: scale(0.9);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  
+  .animate-slide-in {
+    animation: slideIn 0.3s ease-out;
+  }
+  
+  .animate-scale-in {
+    animation: scaleIn 0.2s ease-out;
+  }
+`;
+
 const Dashboard = ({ user }) => {
   const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState({ title: "", content: "" });
@@ -23,7 +56,12 @@ const Dashboard = ({ user }) => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [toast, setToast] = useState({ show: false, message: "", type: "" });
+  const [deleteModal, setDeleteModal] = useState({
+    show: false,
+    noteId: null,
+    noteTitle: "",
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -107,9 +145,15 @@ const Dashboard = ({ user }) => {
       setNotes((prevNotes) => [newNoteWithId, ...prevNotes]);
       setNewNote({ title: "", content: "" });
       setShowNoteForm(false);
-      setSuccess("Note created successfully!");
+      setToast({
+        show: true,
+        message: "Note created successfully!",
+        type: "success",
+      });
 
-      setTimeout(() => setSuccess(""), 3000);
+      setTimeout(() => {
+        setToast({ show: false, message: "", type: "" });
+      }, 3000);
     } catch (error) {
       console.error("Error adding note:", error);
 
@@ -160,9 +204,15 @@ const Dashboard = ({ user }) => {
       );
 
       setEditingNote(null);
-      setSuccess("Note updated successfully!");
+      setToast({
+        show: true,
+        message: "Note updated successfully!",
+        type: "success",
+      });
 
-      setTimeout(() => setSuccess(""), 3000);
+      setTimeout(() => {
+        setToast({ show: false, message: "", type: "" });
+      }, 3000);
     } catch (error) {
       console.error("Error updating note:", error);
       setError("Failed to update note. Please try again.");
@@ -172,18 +222,35 @@ const Dashboard = ({ user }) => {
   };
 
   const deleteNote = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this note?")) {
-      return;
-    }
-
     try {
       await deleteDoc(doc(db, "notes", id));
       setNotes((prevNotes) => prevNotes.filter((note) => note.id !== id));
-      setSuccess("Note deleted successfully!");
-      setTimeout(() => setSuccess(""), 3000);
+      setToast({
+        show: true,
+        message: "Note deleted successfully!",
+        type: "success",
+      });
+      setTimeout(() => {
+        setToast({ show: false, message: "", type: "" });
+      }, 3000);
     } catch (error) {
       console.error("Error deleting note:", error);
       setError("Failed to delete note. Please try again.");
+    }
+  };
+
+  const showDeleteModal = (noteId, noteTitle) => {
+    setDeleteModal({ show: true, noteId, noteTitle });
+  };
+
+  const hideDeleteModal = () => {
+    setDeleteModal({ show: false, noteId: null, noteTitle: "" });
+  };
+
+  const confirmDelete = async () => {
+    if (deleteModal.noteId) {
+      await deleteNote(deleteModal.noteId);
+      hideDeleteModal();
     }
   };
 
@@ -254,6 +321,77 @@ const Dashboard = ({ user }) => {
 
   return (
     <div className="min-h-screen bg-gray-900">
+      {/* Inject custom styles */}
+      <style>{toastStyles}</style>
+
+      {/* Toast Notification */}
+      {toast.show && (
+        <div className="fixed bottom-4 right-4 z-50 animate-slide-in">
+          <div
+            className={`px-6 py-4 rounded-xl shadow-2xl backdrop-blur-lg border ${
+              toast.type === "success"
+                ? "bg-green-500/20 border-green-500/30 text-green-200"
+                : "bg-red-500/20 border-red-500/30 text-red-200"
+            }`}
+          >
+            <div className="flex items-center space-x-3">
+              <div className="flex-shrink-0">
+                {toast.type === "success" ? (
+                  <svg
+                    className="w-5 h-5 text-green-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
+                  </svg>
+                ) : (
+                  <svg
+                    className="w-5 h-5 text-red-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
+                  </svg>
+                )}
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-medium">{toast.message}</p>
+              </div>
+              <button
+                onClick={() => setToast({ show: false, message: "", type: "" })}
+                className="flex-shrink-0 text-gray-400 hover:text-gray-300 transition-colors"
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <header className="bg-white/10 backdrop-blur-lg border-b border-white/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -281,14 +419,47 @@ const Dashboard = ({ user }) => {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Alerts */}
         {error && (
-          <div className="mb-6 p-4 bg-red-500/20 border border-red-500/50 rounded-lg text-red-300">
-            {error}
-          </div>
-        )}
-
-        {success && (
-          <div className="mb-6 p-4 bg-green-500/20 border border-green-500/50 rounded-lg text-green-300">
-            {success}
+          <div className="mb-6 p-4 bg-red-500/10 backdrop-blur-lg border border-red-500/30 rounded-xl text-red-200 shadow-lg relative overflow-hidden">
+            <div className="flex items-center space-x-3">
+              <div className="flex-shrink-0">
+                <svg
+                  className="w-5 h-5 text-red-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
+                </svg>
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-medium">{error}</p>
+              </div>
+              <button
+                onClick={() => setError("")}
+                className="flex-shrink-0 text-red-400 hover:text-red-300 transition-colors"
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+            {/* Animated background */}
+            <div className="absolute inset-0 bg-gradient-to-r from-red-500/5 to-transparent opacity-50"></div>
           </div>
         )}
 
@@ -467,7 +638,7 @@ const Dashboard = ({ user }) => {
                           </svg>
                         </button>
                         <button
-                          onClick={() => deleteNote(note.id)}
+                          onClick={() => showDeleteModal(note.id, note.title)}
                           className="p-2 text-gray-400 hover:text-red-400 transition-colors"
                           title="Delete note"
                         >
@@ -500,6 +671,75 @@ const Dashboard = ({ user }) => {
           )}
         </div>
       </main>
+
+      {/* Custom Delete Modal */}
+      {deleteModal.show && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-gray-800/95 backdrop-blur-lg border border-gray-700/50 rounded-2xl p-6 max-w-md w-full mx-4 shadow-2xl animate-scale-in">
+            <div className="text-center">
+              {/* Warning Icon */}
+              <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-500/20 mb-4">
+                <svg
+                  className="h-6 w-6 text-red-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+                  ></path>
+                </svg>
+              </div>
+
+              {/* Title */}
+              <h3 className="text-lg font-semibold text-white mb-2">
+                Delete Note
+              </h3>
+
+              {/* Message */}
+              <p className="text-gray-300 mb-6">
+                Are you sure you want to delete{" "}
+                <span className="font-medium text-yellow-400">
+                  "{deleteModal.noteTitle}"
+                </span>
+                ? This action cannot be undone.
+              </p>
+
+              {/* Buttons */}
+              <div className="flex space-x-3">
+                <button
+                  onClick={hideDeleteModal}
+                  className="flex-1 px-4 py-2 bg-gray-600 text-white font-medium rounded-lg hover:bg-gray-700 transition-all duration-200"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmDelete}
+                  className="flex-1 px-4 py-2 bg-red-500 text-white font-medium rounded-lg hover:bg-red-600 transition-all duration-200 flex items-center justify-center space-x-2"
+                >
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    ></path>
+                  </svg>
+                  <span>Delete</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
