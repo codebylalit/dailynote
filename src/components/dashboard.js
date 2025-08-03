@@ -33,22 +33,42 @@ const Dashboard = ({ user }) => {
   const fetchNotes = async () => {
     try {
       setLoading(true);
-      if (user) {
-        const notesQuery = query(
-          collection(db, "notes"),
-          where("userId", "==", user.uid),
-          orderBy("createdAt", "desc")
-        );
-        const notesSnapshot = await getDocs(notesQuery);
-        const notesData = notesSnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setNotes(notesData);
+      setError("");
+
+      if (!user || !user.uid) {
+        setError("Authentication error. Please sign in again.");
+        return;
       }
+
+      console.log("Fetching notes for user:", user.uid);
+      const notesQuery = query(
+        collection(db, "notes"),
+        where("userId", "==", user.uid),
+        orderBy("createdAt", "desc")
+      );
+      const notesSnapshot = await getDocs(notesQuery);
+      const notesData = notesSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setNotes(notesData);
     } catch (error) {
       console.error("Error fetching notes:", error);
-      setError("Failed to load notes. Please refresh the page.");
+
+      // Provide more specific error messages
+      if (error.code === "permission-denied") {
+        setError(
+          "Permission denied. Please check your Firestore security rules."
+        );
+      } else if (error.code === "unauthenticated") {
+        setError("Authentication error. Please sign in again.");
+      } else if (error.code === "not-found") {
+        setError(
+          "Database not found. Please check your Firebase configuration."
+        );
+      } else {
+        setError(`Failed to load notes: ${error.message}`);
+      }
     } finally {
       setLoading(false);
     }
@@ -59,6 +79,12 @@ const Dashboard = ({ user }) => {
 
     if (!newNote.title.trim() || !newNote.content.trim()) {
       setError("Please fill in both title and content");
+      return;
+    }
+
+    // Check if user is authenticated
+    if (!user || !user.uid) {
+      setError("Authentication error. Please sign in again.");
       return;
     }
 
@@ -74,6 +100,7 @@ const Dashboard = ({ user }) => {
         updatedAt: new Date(),
       };
 
+      console.log("Attempting to add note with data:", noteData);
       const docRef = await addDoc(collection(db, "notes"), noteData);
       const newNoteWithId = { id: docRef.id, ...noteData };
 
@@ -85,7 +112,21 @@ const Dashboard = ({ user }) => {
       setTimeout(() => setSuccess(""), 3000);
     } catch (error) {
       console.error("Error adding note:", error);
-      setError("Failed to create note. Please try again.");
+
+      // Provide more specific error messages
+      if (error.code === "permission-denied") {
+        setError(
+          "Permission denied. Please check your Firestore security rules."
+        );
+      } else if (error.code === "unauthenticated") {
+        setError("Authentication error. Please sign in again.");
+      } else if (error.code === "not-found") {
+        setError(
+          "Database not found. Please check your Firebase configuration."
+        );
+      } else {
+        setError(`Failed to create note: ${error.message}`);
+      }
     } finally {
       setSaving(false);
     }
