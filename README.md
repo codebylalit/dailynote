@@ -109,13 +109,6 @@ dailynote/
 4. Set up security rules for the `notes` collection
 5. Add your Firebase config to `src/firebase.js`
 
-### Environment Variables
-Create a `.env` file in the root directory for sensitive configuration:
-```
-REACT_APP_FIREBASE_API_KEY=your-api-key
-REACT_APP_FIREBASE_AUTH_DOMAIN=your-domain
-REACT_APP_FIREBASE_PROJECT_ID=your-project-id
-```
 
 ## 🎨 Customization
 
@@ -156,4 +149,4 @@ If you encounter any issues or have questions, please:
 
 ---
 
-**Happy Note-Taking! 📝✨**
+**Happy Note-Taking :)
