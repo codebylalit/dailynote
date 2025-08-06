@@ -52,6 +52,7 @@ function App() {
               user ? <Dashboard user={user} /> : <Navigate to="/login" />
             }
           />
+          <Route path="/notes" element={<Dashboard />} />
         </Routes>
       </div>
     </Router>

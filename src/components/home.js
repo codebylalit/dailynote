@@ -28,6 +28,14 @@ const Home = ({ user }) => {
 
   const navigate = useNavigate();
 
+  const goToNotes = () => {
+    navigate("/notes");
+  };
+
+  const goToDashboard = () => {
+    navigate("/dashboard");
+  };
+
   const goToLogin = () => {
     navigate("/login");
   };
@@ -36,222 +44,243 @@ const Home = ({ user }) => {
     navigate("/register");
   };
 
-  const goToDashboard = () => {
-    navigate("/dashboard");
-  };
-
   return (
-    <section className="bg-gray-900 text-white min-h-screen flex flex-col items-center">
-      <header className="flex justify-between w-full px-8 py-6">
-        <div className="relative flex items-center space-x-4">
-          <div className="absolute -left-0 w-14 h-14 rounded-full bg-yellow-500 z-0"></div>
-          <h1 className="text-3xl font-bold text-white relative z-10">
-            DailyNote
-          </h1>
-        </div>
-
-        <button
-          className="sm:hidden text-white focus:outline-none"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M4 6h16M4 12h16M4 18h16"
-            ></path>
-          </svg>
-        </button>
-
-        <nav className="hidden sm:flex">
-          <ul className="flex space-x-6">
+    <section className="bg-gray-900 text-white min-h-screen">
+      {/* Navigation */}
+      <nav className="absolute top-0 left-0 right-0 p-6 z-10">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <div className="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center">
+              <svg className="w-5 h-5 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+            </div>
+            <span className="text-xl font-semibold text-white">DailyNote</span>
+          </div>
+          
+          <div className="hidden md:flex items-center space-x-6">
+            <Link to="/notes" className="text-gray-300 hover:text-yellow-500 transition-colors duration-200">
+              Start Writing
+            </Link>
             {user ? (
-              <li>
-                <button
-                  onClick={goToDashboard}
-                  className="bg-yellow-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-600 transition-all duration-200 font-semibold"
-                >
-                  Dashboard
-                </button>
-              </li>
-            ) : (
-              <>
-                <li>
-                  <button
-                    onClick={goToLogin}
-                    className="bg-yellow-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-600 transition-all duration-200 font-semibold"
-                  >
-                    Log in
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={goToRegister}
-                    className="bg-yellow-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-600 transition-all duration-200 font-semibold"
-                  >
-                    Sign up
-                  </button>
-                </li>
-              </>
-            )}
-          </ul>
-        </nav>
-      </header>
-
-      <nav
-        className={`sm:hidden ${
-          isMenuOpen ? "block" : "hidden"
-        } w-full bg-white/10 backdrop-blur-lg border-b border-white/20 text-white p-4`}
-      >
-        <ul className="flex flex-col space-y-4">
-          {user ? (
-            <li>
               <button
                 onClick={goToDashboard}
-                className="bg-yellow-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-600 transition-all duration-200 font-semibold w-full"
+                className="bg-yellow-500 text-gray-900 px-6 py-2 rounded-lg hover:bg-yellow-600 transition-colors duration-200 font-semibold"
               >
-                Dashboard
+                My Notes
               </button>
-            </li>
-          ) : (
-            <>
-              <li>
+            ) : (
+              <div className="flex items-center space-x-3">
                 <button
                   onClick={goToLogin}
-                  className="bg-yellow-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-600 transition-all duration-200 font-semibold w-full"
+                  className="text-gray-300 hover:text-yellow-500 transition-colors duration-200"
                 >
-                  Log in
+                  Sign In
                 </button>
-              </li>
-              <li>
                 <button
                   onClick={goToRegister}
-                  className="bg-yellow-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-600 transition-all duration-200 font-semibold w-full"
+                  className="bg-yellow-500 text-gray-900 px-6 py-2 rounded-lg hover:bg-yellow-600 transition-colors duration-200 font-semibold"
                 >
-                  Sign up
+                  Sign Up
                 </button>
-              </li>
-            </>
-          )}
-        </ul>
+              </div>
+            )}
+          </div>
+
+          {/* Mobile menu button */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="md:hidden text-gray-300 hover:text-yellow-500 transition-colors duration-200"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
+        </div>
+
+        {/* Mobile menu */}
+        {isMenuOpen && (
+          <div className="md:hidden absolute top-full left-0 right-0 bg-gray-800 shadow-lg border-t border-gray-700">
+            <div className="px-6 py-4 space-y-4">
+              <Link to="/notes" className="block text-gray-300 hover:text-yellow-500 transition-colors duration-200">
+                Start Writing
+              </Link>
+              {user ? (
+                <button
+                  onClick={goToDashboard}
+                  className="w-full bg-yellow-500 text-gray-900 px-6 py-2 rounded-lg hover:bg-yellow-600 transition-colors duration-200 font-semibold"
+                >
+                  My Notes
+                </button>
+              ) : (
+                <div className="space-y-2">
+                  <button
+                    onClick={goToLogin}
+                    className="w-full text-gray-300 hover:text-yellow-500 transition-colors duration-200 text-left"
+                  >
+                    Sign In
+                  </button>
+                  <button
+                    onClick={goToRegister}
+                    className="w-full bg-yellow-500 text-gray-900 px-6 py-2 rounded-lg hover:bg-yellow-600 transition-colors duration-200 font-semibold"
+                  >
+                    Sign Up
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </nav>
 
-      <div className="text-center py-24 px-6 max-w-4xl mx-auto">
-        {user ? (
-          <>
-            <h2 className="text-4xl font-bold mb-6 text-white">
-              Welcome back to DailyNote!
-            </h2>
-            <p className="text-xl mb-8 text-gray-300">
-              Ready to continue organizing your thoughts? Access your notes and
-              create new ones.
-            </p>
+      {/* Hero Section */}
+      <div className="flex items-center justify-center min-h-screen px-4">
+        <div className="text-center mt-28 max-w-4xl">
+          <div className="mb-8">
+            <div className="inline-flex items-center px-4 py-2 bg-yellow-500/20 border border-yellow-500/30 rounded-full text-yellow-400 text-sm font-medium">
+              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              No account required to start
+            </div>
+          </div>
+          
+          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
+            Your thoughts,
+            <br />
+            <span className="text-yellow-500">organized simply</span>
+          </h1>
+          
+          <p className="text-xl md:text-2xl text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
+            A clean, fast, and beautiful note-taking app that helps you capture ideas and stay organized.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 mb-16">
             <button
-              onClick={goToDashboard}
-              className="bg-yellow-500 text-white px-8 py-4 rounded-lg text-lg hover:bg-yellow-600 transition-all duration-200 font-semibold"
+              onClick={goToNotes}
+              className="bg-yellow-500 text-gray-900 px-8 py-4 rounded-xl text-lg font-semibold hover:bg-yellow-600 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
             >
-              Go to Dashboard
+              Start Writing Now
             </button>
-          </>
-        ) : (
-          <>
-            <h2 className="text-4xl font-bold mb-6 text-white">
-              Your notes at your fingertips with DailyNote
-            </h2>
-            <p className="text-xl mb-8 text-gray-300">
-              All your notes, synced on all your devices. Available on iOS,
-              Android, Mac, Windows, Linux, or in your browser.
-            </p>
-            <button
-              onClick={goToRegister}
-              className="bg-yellow-500 text-white px-8 py-4 rounded-lg text-lg hover:bg-yellow-600 transition-all duration-200 font-semibold"
-            >
-              Join DailyNote today
-            </button>
-          </>
-        )}
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 mb-10 px-14">
-        <div className="bg-white/10 backdrop-blur-lg p-6 rounded-2xl shadow-2xl text-center border border-white/20 hover:border-white/30 transition-all duration-200">
-          <div className="text-4xl text-yellow-400 mb-4">
-            <svg
-              className="w-12 h-12 mx-auto"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M13 10V3L4 14h7v7l9-11h-7z"
-              ></path>
-            </svg>
+            {!user && (
+              <button
+                onClick={goToRegister}
+                className="border-2 border-yellow-500 text-yellow-500 px-8 py-4 rounded-xl text-lg font-semibold hover:bg-yellow-500 hover:text-gray-900 transition-all duration-200"
+              >
+                Sign Up for Cloud Sync
+              </button>
+            )}
           </div>
-          <h3 className="text-2xl font-semibold text-white mb-2">
-            Simple and Fast
-          </h3>
-          <p className="text-gray-300">
-            Get started quickly and keep your notes organized effortlessly.
-          </p>
-        </div>
-        <div className="bg-white/10 backdrop-blur-lg p-6 rounded-2xl shadow-2xl text-center border border-white/20 hover:border-white/30 transition-all duration-200">
-          <div className="text-4xl text-yellow-400 mb-4">
-            <svg
-              className="w-12 h-12 mx-auto"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-              ></path>
-            </svg>
-          </div>
-          <h3 className="text-2xl font-semibold text-white mb-2">Secure</h3>
-          <p className="text-gray-300">
-            Your notes are encrypted and kept safe in the cloud.
-          </p>
-        </div>
-        <div className="bg-white/10 backdrop-blur-lg p-6 rounded-2xl shadow-2xl text-center border border-white/20 hover:border-white/30 transition-all duration-200">
-          <div className="text-4xl text-yellow-400 mb-4">
-            <svg
-              className="w-12 h-12 mx-auto"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-              ></path>
-            </svg>
-          </div>
-          <h3 className="text-2xl font-semibold text-white mb-2">
-            Syncing Your Notes
-          </h3>
-          <p className="text-gray-300">
-            Access all your notes across any device.
-          </p>
         </div>
       </div>
 
-      <footer className="mt-12 text-center">
-        <p className="text-sm text-gray-400">
-          &copy; 2024 DailyNote. All rights reserved.
+      {/* Features Section */}
+      <div className="py-20 px-4 bg-gray-800/30">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Why choose DailyNote?
+            </h2>
+            <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+              Built for simplicity and productivity, with your privacy in mind.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-gray-800/50 backdrop-blur-lg p-8 rounded-2xl shadow-lg border border-gray-700/50 hover:shadow-xl transition-all duration-300">
+              <div className="w-12 h-12 bg-yellow-500/20 rounded-xl flex items-center justify-center mb-6">
+                <svg className="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-3">Lightning Fast</h3>
+              <p className="text-gray-300 leading-relaxed">
+                Write and organize your notes instantly. No loading times, no delays - just pure productivity.
+              </p>
+            </div>
+
+            <div className="bg-gray-800/50 backdrop-blur-lg p-8 rounded-2xl shadow-lg border border-gray-700/50 hover:shadow-xl transition-all duration-300">
+              <div className="w-12 h-12 bg-yellow-500/20 rounded-xl flex items-center justify-center mb-6">
+                <svg className="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-3">100% Private</h3>
+              <p className="text-gray-300 leading-relaxed">
+                Your notes stay on your device. No cloud storage, no data collection - complete privacy.
+              </p>
+            </div>
+
+            <div className="bg-gray-800/50 backdrop-blur-lg p-8 rounded-2xl shadow-lg border border-gray-700/50 hover:shadow-xl transition-all duration-300">
+              <div className="w-12 h-12 bg-yellow-500/20 rounded-xl flex items-center justify-center mb-6">
+                <svg className="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-3">Cloud Sync (Optional)</h3>
+              <p className="text-gray-300 leading-relaxed">
+                Sign up to sync your notes across all devices. Your choice - local or cloud storage.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* How It Works Section */}
+      <div className="py-20 px-4">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              How it works
+            </h2>
+            <p className="text-lg text-gray-300">
+              Get started in seconds, no matter your preference.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div className="text-center">
+              <div className="w-20 h-20 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg className="w-10 h-10 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-4">Quick Start</h3>
+              <p className="text-gray-300 mb-6">
+                Click "Start Writing" and begin immediately. No account required, no setup needed.
+              </p>
+              <button
+                onClick={goToNotes}
+                className="bg-yellow-500 text-gray-900 px-6 py-3 rounded-lg font-semibold hover:bg-yellow-600 transition-colors duration-200"
+              >
+                Start Writing
+              </button>
+            </div>
+
+            <div className="text-center">
+              <div className="w-20 h-20 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg className="w-10 h-10 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-4">Cloud Sync</h3>
+              <p className="text-gray-300 mb-6">
+                Sign up for free to sync your notes across all your devices and never lose your ideas.
+              </p>
+              <button
+                onClick={goToRegister}
+                className="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-colors duration-200"
+              >
+                Sign Up Free
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* Footer */}
+      <footer className="py-12 text-center">
+        <p className="text-sm text-gray-500">
+          &copy; 2024 DailyNote. Made with ❤️ for better note-taking.
         </p>
       </footer>
     </section>

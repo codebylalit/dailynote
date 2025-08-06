@@ -40,29 +40,16 @@ A modern, responsive note-taking application built with React and Firebase. Dail
    ```bash
    npm install
    ```
-
-3. **Firebase Configuration**
-   
-   Create a Firebase project and add your configuration to `src/firebase.js`:
-   ```javascript
-   const firebaseConfig = {
-     apiKey: "your-api-key",
-     authDomain: "your-project.firebaseapp.com",
-     projectId: "your-project-id",
-     storageBucket: "your-project.appspot.com",
-     messagingSenderId: "your-sender-id",
-     appId: "your-app-id"
-   };
    ```
 
-4. **Start the development server**
+3. **Start the development server**
    ```bash
    npm start
    ```
 
    The application will open at [http://localhost:3000](http://localhost:3000)
 
-## 📖 Usage
+## Usage
 
 ### Authentication
 - **Register**: Create a new account with email and password
