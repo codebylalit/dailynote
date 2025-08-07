@@ -375,78 +375,72 @@ const Dashboard = ({ user }) => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-gray-900 flex flex-col">
       <style>{toastStyles}</style>
-      
       {/* Header */}
-      <header className="bg-gray-800 border-b border-gray-700 px-6 py-4">
-        <div className="flex items-center justify-between">
+      <header className="bg-gray-800 border-b border-gray-700 px-6 py-6 md:py-8 flex-shrink-0">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-0">
           <div className="flex items-center space-x-4">
-            <h1 className="text-2xl font-semibold text-white">Notes</h1>
+            <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">Notes</h1>
             {!user && (
               <div className="flex items-center px-3 py-1 bg-yellow-500/20 border border-yellow-500/30 rounded-full">
-                <svg className="w-4 h-4 text-yellow-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 text-yellow-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
                 </svg>
-                <span className="text-yellow-400 text-sm font-medium">Local Storage</span>
+                <span className="text-yellow-400 text-base font-medium">Local Storage</span>
               </div>
             )}
             {user && (
               <div className="flex items-center px-3 py-1 bg-blue-500/20 border border-blue-500/30 rounded-full">
-                <svg className="w-4 h-4 text-blue-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 text-blue-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                 </svg>
-                <span className="text-blue-400 text-sm font-medium">Cloud Sync</span>
+                <span className="text-blue-400 text-base font-medium">Cloud Sync</span>
               </div>
             )}
             <button
               onClick={() => setShowNoteForm(true)}
-              className="bg-yellow-500 text-gray-900 px-4 py-2 rounded-lg hover:bg-yellow-600 transition-colors duration-200 flex items-center space-x-2 text-sm font-medium"
+              className="bg-yellow-500 text-gray-900 px-5 py-2 rounded-lg hover:bg-yellow-600 transition-colors duration-200 flex items-center space-x-2 text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4"></path>
               </svg>
               <span>New Note</span>
             </button>
           </div>
-          
-          <div className="flex items-center space-x-4">
-            <div className="relative">
+          <div className="flex items-center space-x-4 w-full md:w-auto">
+            <div className="relative flex-1 md:flex-none">
               <input
                 type="text"
                 placeholder="Search notes..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-64 px-4 py-2 pl-10 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-white placeholder-gray-400 text-sm"
+                className="w-full md:w-72 px-5 py-2 pl-12 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-white placeholder-gray-400 text-base shadow-sm"
               />
-              <svg className="w-4 h-4 absolute left-3 top-2.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 absolute left-4 top-2.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
               </svg>
             </div>
-            
             {user && (
               <div className="flex items-center space-x-3">
-                <span className="text-gray-300 text-sm">
-                  {user.email}
-                </span>
+                <span className="text-gray-300 text-base font-medium truncate max-w-[120px] md:max-w-none">{user.email}</span>
                 <button
                   onClick={handleSignOut}
                   className="text-gray-400 hover:text-red-400 transition-colors duration-200"
                   title="Sign Out"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
                   </svg>
                 </button>
               </div>
             )}
-            
             {!user && (
               <div className="flex items-center space-x-2">
-                <span className="text-gray-400 text-sm">Want cloud sync?</span>
+                <span className="text-gray-400 text-base">Want cloud sync?</span>
                 <button
                   onClick={() => navigate("/register")}
-                  className="text-yellow-500 hover:text-yellow-400 transition-colors duration-200 text-sm font-medium"
+                  className="text-yellow-500 hover:text-yellow-400 transition-colors duration-200 text-base font-semibold"
                 >
                   Sign Up
                 </button>
@@ -455,41 +449,40 @@ const Dashboard = ({ user }) => {
           </div>
         </div>
       </header>
-
-      <div className="flex h-screen">
+      <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
         {/* Sidebar */}
-        <div className="w-80 bg-gray-800 border-r border-gray-700 overflow-y-auto">
-          <div className="p-4">
+        <aside className="w-full md:w-96 bg-gray-800 border-r border-gray-700 overflow-y-auto flex-shrink-0 transition-all duration-300">
+          <div className="p-6">
             {loading ? (
-              <div className="flex items-center justify-center py-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-yellow-500"></div>
+              <div className="flex items-center justify-center py-12">
+                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-yellow-500"></div>
               </div>
             ) : filteredNotes.length === 0 ? (
-              <div className="text-center py-8">
+              <div className="text-center py-12">
                 <div className="text-gray-400 mb-4">
-                  <svg className="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-14 h-14 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                   </svg>
                 </div>
-                <h3 className="text-lg font-medium text-white mb-2">No notes yet</h3>
-                <p className="text-gray-400">Create your first note to get started!</p>
+                <h3 className="text-2xl font-semibold text-white mb-2">No notes yet</h3>
+                <p className="text-gray-400 text-base">Create your first note to get started!</p>
               </div>
             ) : (
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {filteredNotes.map((note) => (
                   <div
                     key={note.id}
                     onClick={() => setSelectedNote(note)}
-                    className={`p-4 rounded-lg cursor-pointer transition-colors duration-200 ${
+                    className={`p-5 rounded-xl cursor-pointer transition-colors duration-200 shadow-sm border-2 ${
                       selectedNote?.id === note.id
-                        ? "bg-yellow-500/20 border border-yellow-500/50"
-                        : "hover:bg-gray-700 border border-transparent"
+                        ? "bg-yellow-500/20 border-yellow-500/70"
+                        : "hover:bg-gray-700 border-transparent"
                     }`}
                   >
-                    <h3 className="font-medium text-white mb-1 truncate">
+                    <h3 className="font-semibold text-lg text-white mb-1 truncate">
                       {note.title}
                     </h3>
-                    <p className="text-sm text-gray-300 mb-2 line-clamp-2">
+                    <p className="text-base text-gray-300 mb-2 line-clamp-2">
                       {note.content}
                     </p>
                     <div className="flex items-center justify-between">
@@ -503,7 +496,7 @@ const Dashboard = ({ user }) => {
                         }}
                         className="text-gray-400 hover:text-red-400 transition-colors duration-200"
                       >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                         </svg>
                       </button>
@@ -513,23 +506,22 @@ const Dashboard = ({ user }) => {
               </div>
             )}
           </div>
-        </div>
-
+        </aside>
         {/* Main Content */}
-        <div className="flex-1 bg-gray-900">
+        <main className="flex-1 bg-gray-900 overflow-y-auto p-6 md:p-10 flex flex-col">
           {selectedNote ? (
             <div className="h-full flex flex-col">
-              <div className="p-6 border-b border-gray-700">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-semibold text-white">
+              <div className="pb-6 border-b border-gray-700 mb-6">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-4 md:gap-0">
+                  <h2 className="text-2xl md:text-3xl font-bold text-white">
                     {selectedNote.title}
                   </h2>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-3">
                     <button
                       onClick={() => setEditingNote(selectedNote)}
                       className="text-gray-400 hover:text-yellow-500 transition-colors duration-200"
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                       </svg>
                     </button>
@@ -537,19 +529,19 @@ const Dashboard = ({ user }) => {
                       onClick={() => showDeleteModal(selectedNote.id, selectedNote.title)}
                       className="text-gray-400 hover:text-red-400 transition-colors duration-200"
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                       </svg>
                     </button>
                   </div>
                 </div>
-                <p className="text-sm text-gray-400">
+                <p className="text-base text-gray-400">
                   Last modified: {formatDate(selectedNote.updatedAt || selectedNote.createdAt)}
                 </p>
               </div>
-              <div className="flex-1 p-6 overflow-y-auto">
+              <div className="flex-1 overflow-y-auto">
                 <div className="prose prose-invert max-w-none">
-                  <p className="text-gray-300 whitespace-pre-wrap">
+                  <p className="text-gray-300 whitespace-pre-wrap text-lg leading-relaxed">
                     {selectedNote.content}
                   </p>
                 </div>
@@ -559,20 +551,20 @@ const Dashboard = ({ user }) => {
             <div className="h-full flex items-center justify-center">
               <div className="text-center">
                 <div className="text-gray-400 mb-4">
-                  <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-20 h-20 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                   </svg>
                 </div>
-                <h3 className="text-xl font-semibold text-white mb-2">
+                <h3 className="text-2xl font-semibold text-white mb-2">
                   Select a note
                 </h3>
-                <p className="text-gray-400">
+                <p className="text-gray-400 text-base">
                   Choose a note from the sidebar to view its contents
                 </p>
               </div>
             </div>
           )}
-        </div>
+        </main>
       </div>
 
       {/* New Note Modal */}
