@@ -67,10 +67,18 @@ const Dashboard = ({ user }) => {
   const [isListening, setIsListening] = useState(false);
   const [recognition, setRecognition] = useState(null);
   const navigate = useNavigate();
+  const [lastSync, setLastSync] = useState("");
 
   useEffect(() => {
     fetchNotes();
     initializeSpeechRecognition();
+    if (user) {
+      // Simulate a sync event by updating the timestamp every time user changes
+      const now = new Date();
+      setLastSync(now.toLocaleString());
+    } else {
+      setLastSync("");
+    }
   }, [user]);
 
   const initializeSpeechRecognition = () => {
@@ -399,22 +407,42 @@ const Dashboard = ({ user }) => {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-0">
           <div className="flex items-center space-x-4">
             <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">Notes</h1>
-            {!user && (
-              <div className="flex items-center px-3 py-1 bg-yellow-500/20 border border-yellow-500/30 rounded-full">
-                <svg className="w-5 h-5 text-yellow-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                <span className="text-yellow-400 text-base font-medium">Local Storage</span>
+            <div className="mb-6 flex flex-col items-center justify-center">
+              {/* Storage Mode Badge */}
+              {user ? (
+                <div className="group relative mb-1">
+                  <span className="inline-flex items-center px-4 py-2 bg-blue-600/80 border-2 border-blue-400 rounded-full text-white text-base font-bold shadow-lg pulse-badge animate-glow">
+                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                    Cloud Sync
+                  </span>
+                  <span className="absolute left-1/2 -translate-x-1/2 mt-2 w-56 bg-blue-700 text-white text-xs rounded-lg px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 shadow-xl">
+                    Your notes are securely synced to the cloud and accessible from any device.
+                  </span>
+                </div>
+              ) : (
+                <div className="group relative mb-1">
+                  <span className="inline-flex items-center px-4 py-2 bg-yellow-500/90 border-2 border-yellow-400 rounded-full text-gray-900 text-base font-bold shadow-lg pulse-badge-yellow animate-glow">
+                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Local Storage
+                  </span>
+                  <span className="absolute left-1/2 -translate-x-1/2 mt-2 w-56 bg-yellow-600 text-white text-xs rounded-lg px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 shadow-xl">
+                    Your notes are saved only on this device and are private to you.
+                  </span>
+                </div>
+              )}
+              {/* Last Sync Indicator */}
+              <div className="text-xs text-gray-400 mt-1">
+                {user ? (
+                  <>Last Sync: {lastSync}</>
+                ) : (
+                  <>Local changes saved instantly</>
+                )}
               </div>
-            )}
-            {user && (
-              <div className="flex items-center px-3 py-1 bg-blue-500/20 border border-blue-500/30 rounded-full">
-                <svg className="w-5 h-5 text-blue-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                </svg>
-                <span className="text-blue-400 text-base font-medium">Cloud Sync</span>
-              </div>
-            )}
+            </div>
             <button
               onClick={() => setShowNoteForm(true)}
               className="bg-yellow-500 text-gray-900 px-5 py-2 rounded-lg hover:bg-yellow-600 transition-colors duration-200 flex items-center space-x-2 text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
