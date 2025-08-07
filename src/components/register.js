@@ -10,6 +10,7 @@ const Register = () => {
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
@@ -108,13 +109,21 @@ const Register = () => {
 
             <div>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="Password"
                 className="w-full px-4 py-3 text-white bg-gray-800/50 placeholder-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 border border-gray-700 transition-all duration-200"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={loading}
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="mt-2 text-xs text-yellow-400 hover:text-yellow-300 focus:outline-none"
+                style={{ float: 'right' }}
+              >
+                {showPassword ? "Hide Password" : "Show Password"}
+              </button>
             </div>
 
             <button
