@@ -376,7 +376,24 @@ const Dashboard = ({ user }) => {
 
   return (
     <div className="min-h-screen bg-gray-900 flex flex-col">
-      <style>{toastStyles}</style>
+      <style>{`
+  @keyframes pulseBadge {
+    0% { box-shadow: 0 0 0 0 rgba(59,130,246,0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(59,130,246,0); }
+    100% { box-shadow: 0 0 0 0 rgba(59,130,246,0); }
+  }
+  .pulse-badge {
+    animation: pulseBadge 2s infinite;
+  }
+  @keyframes pulseBadgeYellow {
+    0% { box-shadow: 0 0 0 0 rgba(234,179,8,0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(234,179,8,0); }
+    100% { box-shadow: 0 0 0 0 rgba(234,179,8,0); }
+  }
+  .pulse-badge-yellow {
+    animation: pulseBadgeYellow 2s infinite;
+  }
+`}</style>
       {/* Header */}
       <header className="bg-gray-800 border-b border-gray-700 px-6 py-6 md:py-8 flex-shrink-0">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-0">
