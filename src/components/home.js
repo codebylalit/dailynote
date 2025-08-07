@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 
 const Home = ({ user }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
     const cursorTrail = (e) => {
@@ -21,8 +22,15 @@ const Home = ({ user }) => {
 
     document.body.addEventListener("mousemove", cursorTrail);
 
+    // Scroll event for scroll-to-top button
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 200);
+    };
+    window.addEventListener("scroll", handleScroll);
+
     return () => {
       document.body.removeEventListener("mousemove", cursorTrail);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
@@ -283,6 +291,16 @@ const Home = ({ user }) => {
           &copy; 2024 DailyNote. Made with ❤️ for better note-taking.
         </p>
       </footer>
+      {/* Scroll to Top Button */}
+      {showScrollTop && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className="fixed bottom-8 right-8 bg-yellow-500 text-gray-900 px-4 py-2 rounded-full shadow-lg hover:bg-yellow-600 transition-colors duration-200 z-50"
+          aria-label="Scroll to top"
+        >
+          ↑ Top
+        </button>
+      )}
     </section>
   );
 };
